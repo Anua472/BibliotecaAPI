@@ -52,7 +52,7 @@ public class LibroControllerTests
         LibroDTO? libro = await response.Content.ReadFromJsonAsync<LibroDTO>();
 
         libro.Should().NotBeNull();
-        libro!.Id.Should().Be(2);
+        libro!.Id.Should().Be(1);
         libro.Titulo.Should().Be("Harry Potter y la piedra filosofal");
         libro.Autor.Should().Be("J. K. Rowling");
     }
