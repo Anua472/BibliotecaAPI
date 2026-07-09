@@ -2,10 +2,8 @@ using BibliotecaAPI.Data;
 using BibliotecaAPI.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Data.Sqlite;
+
 
 namespace BibliotecaAPI.Tests;
 public class CustomWebApplicationFactory
