@@ -30,8 +30,8 @@ public class AutorControllerTests
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        List<AutorDTO>? autores =
-            await response.Content.ReadFromJsonAsync<List<AutorDTO>>();
+        List<AutorDto>? autores =
+            await response.Content.ReadFromJsonAsync<List<AutorDto>>();
 
         autores.Should().NotBeNull();
         autores!.Count.Should().BeGreaterOrEqualTo(5);
@@ -52,7 +52,7 @@ public class AutorControllerTests
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        AutorDTO? autor = await response.Content.ReadFromJsonAsync<AutorDTO>();
+        AutorDto? autor = await response.Content.ReadFromJsonAsync<AutorDto>();
 
         autor.Should().NotBeNull();
         autor!.Id.Should().Be(1);
@@ -78,7 +78,7 @@ public class AutorControllerTests
     public async Task Crear_UnAutor_DeberiaPersistirloEnBaseDeDatos()
     {
         // Arrange
-        var nuevoAutor = new AutorCreateDTO
+        var nuevoAutor = new AutorCreateDto
         {
             Nombre = $"Autor Test {Guid.NewGuid()}",
             Nacionalidad = "España",
@@ -93,8 +93,8 @@ public class AutorControllerTests
         postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Assert: el autor existe realmente en la base de datos
-        List<AutorDTO>? todos =
-            await _client.GetFromJsonAsync<List<AutorDTO>>("/api/Autor");
+        List<AutorDto>? todos =
+            await _client.GetFromJsonAsync<List<AutorDto>>("/api/Autor");
 
         todos.Should().Contain(a =>
             a.Nombre == nuevoAutor.Nombre &&
@@ -111,19 +111,19 @@ public class AutorControllerTests
         // Arrange: se crea un autor propio para no interferir con otros tests
         string nombre = $"Autor Update {Guid.NewGuid()}";
 
-        await _client.PostAsJsonAsync("/api/Autor", new AutorCreateDTO
+        await _client.PostAsJsonAsync("/api/Autor", new AutorCreateDto  
         {
             Nombre = nombre,
             Nacionalidad = "Francia",
             FechaNacimiento = new DateTime(1970, 1, 1)
         });
 
-        List<AutorDTO> todos =
-            (await _client.GetFromJsonAsync<List<AutorDTO>>("/api/Autor"))!;
+        List<AutorDto> todos =
+            (await _client.GetFromJsonAsync<List<AutorDto>>("/api/Autor"))!;
 
-        AutorDTO creado = todos.Single(a => a.Nombre == nombre);
+        AutorDto creado = todos.Single(a => a.Nombre == nombre);
 
-        var autorActualizado = new AutorUpdateDTO
+        var autorActualizado = new AutorUpdateDto
         {
             Nombre = nombre,
             Nacionalidad = "Italia",
@@ -138,8 +138,8 @@ public class AutorControllerTests
         putResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Assert: el cambio se ha guardado en base de datos
-        AutorDTO? recargado =
-            await _client.GetFromJsonAsync<AutorDTO>($"/api/Autor/{creado.Id}");
+        AutorDto? recargado =
+            await _client.GetFromJsonAsync<AutorDto>($"/api/Autor/{creado.Id}");
 
         recargado!.Nacionalidad.Should().Be("Italia");
     }
@@ -147,7 +147,7 @@ public class AutorControllerTests
     [Fact]
     public async Task Actualizar_ConIdInexistente_DeberiaDevolver404()
     {
-        var autorActualizado = new AutorUpdateDTO
+        var autorActualizado = new AutorUpdateDto
         {
             Nombre = "No existe",
             Nacionalidad = "Ninguna",
@@ -170,17 +170,17 @@ public class AutorControllerTests
         // Arrange
         string nombre = $"Autor Delete {Guid.NewGuid()}";
 
-        await _client.PostAsJsonAsync("/api/Autor", new AutorCreateDTO
+        await _client.PostAsJsonAsync("/api/Autor", new AutorCreateDto
         {
             Nombre = nombre,
             Nacionalidad = "Portugal",
             FechaNacimiento = new DateTime(1990, 3, 3)
         });
 
-        List<AutorDTO> todos =
-            (await _client.GetFromJsonAsync<List<AutorDTO>>("/api/Autor"))!;
+        List<AutorDto> todos =
+            (await _client.GetFromJsonAsync<List<AutorDto>>("/api/Autor"))!;
 
-        AutorDTO creado = todos.Single(a => a.Nombre == nombre);
+        AutorDto creado = todos.Single(a => a.Nombre == nombre);
 
         // Act
         HttpResponseMessage deleteResponse =
@@ -212,8 +212,8 @@ public class AutorControllerTests
     [Fact]
     public async Task ObtenerPorNacionalidadDeberiaFiltrarCorrectamente()
     {
-        List<AutorDTO>? autores =
-            await _client.GetFromJsonAsync<List<AutorDTO>>(
+        List<AutorDto>? autores =
+            await _client.GetFromJsonAsync<List<AutorDto>>(
                 $"/api/Autor/nacionalidad/{Uri.EscapeDataString("Reino Unido")}");
 
         autores.Should().NotBeNull();
@@ -225,8 +225,8 @@ public class AutorControllerTests
     [Fact]
     public async Task ObtenerSinLibros_NoDeberiaContenerAutoresConLibros()
     {
-        List<AutorDTO>? autores =
-            await _client.GetFromJsonAsync<List<AutorDTO>>("/api/Autor/sin-libros");
+        List<AutorDto   >? autores =
+            await _client.GetFromJsonAsync<List<AutorDto>>("/api/Autor/sin-libros");
 
         autores.Should().NotBeNull();
         // Los 5 autores semilla tienen libros asociados, por lo que no deben aparecer
@@ -241,7 +241,7 @@ public class AutorControllerTests
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        AutorDTO? autor = await response.Content.ReadFromJsonAsync<AutorDTO>();
+        AutorDto? autor = await response.Content.ReadFromJsonAsync<AutorDto>();
 
         autor.Should().NotBeNull();
         autor!.Libros.Count.Should().BeGreaterOrEqualTo(3);

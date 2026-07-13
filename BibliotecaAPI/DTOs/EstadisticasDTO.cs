@@ -1,6 +1,6 @@
 ﻿namespace BibliotecaAPI.DTOs;
 
-public class EstadisticasDTO
+public class EstadisticasDto
 {
     public int TotalLibros { get; set; }
 

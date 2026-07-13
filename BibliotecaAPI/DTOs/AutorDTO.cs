@@ -10,5 +10,5 @@ public class AutorDto
 
     public DateTime FechaNacimiento { get; set; }
 
-    public List<LibroResumenDTO> Libros { get; set; } = [];
+    public List<LibroResumenDto> Libros { get; set; } = [];
 }

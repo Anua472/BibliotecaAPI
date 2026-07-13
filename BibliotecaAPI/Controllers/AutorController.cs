@@ -24,7 +24,7 @@ public class AutorController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> ObtenerPorId(int id)
     {
-        AutorDTO? autor = await Service.ObtenerPorIdAsync(id);
+        AutorDto? autor = await Service.ObtenerPorIdAsync(id);
 
         if (autor == null)
             return NotFound();
@@ -33,7 +33,7 @@ public class AutorController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Crear(AutorCreateDTO dto)
+    public async Task<IActionResult> Crear(AutorCreateDto dto)
     {
         await Service.CrearAsync(dto);
 
@@ -41,7 +41,7 @@ public class AutorController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Actualizar(int id, AutorUpdateDTO dto)
+    public async Task<IActionResult> Actualizar(int id, AutorUpdateDto dto)
     {
         bool actualizado =
             await Service.ActualizarAsync(id, dto);

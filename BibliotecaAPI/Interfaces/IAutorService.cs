@@ -4,19 +4,19 @@ namespace BibliotecaAPI.Interfaces;
 
 public interface IAutorService
 {
-    Task<List<AutorDTO>> ObtenerTodosAsync();
+    Task<List<AutorDto>> ObtenerTodosAsync();
 
-    Task<AutorDTO?> ObtenerPorIdAsync(int id);
+    Task<AutorDto?> ObtenerPorIdAsync(int id);
 
-    Task CrearAsync(AutorCreateDTO autor);
+    Task CrearAsync(AutorCreateDto autor);
 
-    Task<bool> ActualizarAsync(int id, AutorUpdateDTO autor);
+    Task<bool> ActualizarAsync(int id, AutorUpdateDto autor);
 
     Task<bool> EliminarAsync(int id);
 
-    Task<List<AutorDTO>> ObtenerPorNacionalidadAsync(string pais);
+    Task<List<AutorDto>> ObtenerPorNacionalidadAsync(string pais);
 
-    Task<List<AutorDTO>> ObtenerSinLibrosAsync();
+    Task<List<AuthorizationEndpointConventionBuilderExtensions>> ObtenerSinLibrosAsync();
 
-    Task<AutorDTO?> ObtenerAutorConMasLibrosAsync();
+    Task<AutorDto?> ObtenerAutorConMasLibrosAsync();
 }

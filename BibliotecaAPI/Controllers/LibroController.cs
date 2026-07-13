@@ -22,7 +22,7 @@ public class LibroController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> ObtenerPorId(int id)
     {
-        LibroDTO? libro =
+        LibroDto? libro =
             await Service.ObtenerPorIdAsync(id);
 
         if (libro == null)
@@ -32,7 +32,7 @@ public class LibroController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Crear(LibroCreateDTO dto)
+    public async Task<IActionResult> Crear(LibroCreateDto dto)
     {
         await Service.CrearAsync(dto);
 
@@ -40,7 +40,7 @@ public class LibroController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Actualizar(int id, LibroUpdateDTO dto)
+    public async Task<IActionResult> Actualizar(int id, LibroUpdateDto dto)
     {
         bool actualizado =
             await Service.ActualizarAsync(id, dto);

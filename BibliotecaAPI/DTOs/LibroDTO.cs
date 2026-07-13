@@ -8,15 +8,15 @@ public class LibroDto
 
     public string Genero { get; set; } = string.Empty;
 
-    public int NumeroPaginas { get; set; }
+    public int? NumeroPaginas { get; set; }
 
-    public decimal Precio { get; set; }
+    public  decimal Precio { get; set; }
 
-    public bool Disponible { get; set; }
+    public  bool Disponible { get; set; }
 
     public DateTime FechaPublicacion { get; set; }
 
-    public int AutorId { get; set; }
+    public required int AutorId { get; set; }
 
     public string Autor { get; set; } = string.Empty;
 }

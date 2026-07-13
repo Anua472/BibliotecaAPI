@@ -33,8 +33,8 @@ public class LibroControllerTests
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        List<LibroDTO>? libros =
-            await response.Content.ReadFromJsonAsync<List<LibroDTO>>();
+        List<LibroDto>? libros =
+            await response.Content.ReadFromJsonAsync<List<LibroDto  >>();
 
         libros.Should().NotBeNull();
         libros!.Count.Should().BeGreaterOrEqualTo(15);
@@ -48,7 +48,7 @@ public class LibroControllerTests
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        LibroDTO? libro = await response.Content.ReadFromJsonAsync<LibroDTO>();
+        LibroDto? libro = await response.Content.ReadFromJsonAsync<LibroDto>();
 
         libro.Should().NotBeNull();
         libro!.Id.Should().Be(1);
@@ -74,7 +74,7 @@ public class LibroControllerTests
         // Arrange
         var tituloUnico = $"Libro Test {Guid.NewGuid()}";
 
-        var nuevoLibro = new LibroCreateDTO
+        var nuevoLibro = new LibroCreateDto
         {
             Titulo = tituloUnico,
             Genero = "Ciencia Ficción",
@@ -93,8 +93,8 @@ public class LibroControllerTests
         postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Assert: el libro existe realmente en la base de datos
-        List<LibroDTO>? encontrados =
-            await _client.GetFromJsonAsync<List<LibroDTO>>($"/api/Libro/buscar/{Uri.EscapeDataString(tituloUnico)}");
+        List<LibroDto>? encontrados =
+            await _client.GetFromJsonAsync<List<LibroDto>>($"/api/Libro/buscar/{Uri.EscapeDataString(tituloUnico)}");
 
         encontrados.Should().ContainSingle(l => l.Titulo == tituloUnico);
     }
@@ -109,7 +109,7 @@ public class LibroControllerTests
         // Arrange: se crea un libro propio para no interferir con otros tests
         string titulo = $"Libro Update {Guid.NewGuid()}";
 
-        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDTO
+        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDto
         {
             Titulo = titulo,
             Genero = "Drama",
@@ -120,12 +120,12 @@ public class LibroControllerTests
             AutorId = 2
         });
 
-        List<LibroDTO> encontrados =
-            (await _client.GetFromJsonAsync<List<LibroDTO>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
+        List<LibroDto> encontrados =
+            (await _client.GetFromJsonAsync<List<LibroDto>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
 
-        LibroDTO creado = encontrados.Single(l => l.Titulo == titulo);
+        LibroDto creado = encontrados.Single(l => l.Titulo == titulo);
 
-        var libroActualizado = new LibroUpdateDTO
+        var libroActualizado = new LibroUpdateDto
         {
             Titulo = titulo,
             Genero = "Drama histórico",
@@ -144,8 +144,8 @@ public class LibroControllerTests
         putResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Assert: los cambios se han guardado en base de datos
-        LibroDTO? recargado =
-            await _client.GetFromJsonAsync<LibroDTO>($"/api/Libro/{creado.Id}");
+        LibroDto? recargado =
+            await _client.GetFromJsonAsync<LibroDto>($"/api/Libro/{creado.Id}");
 
         recargado!.Genero.Should().Be("Drama histórico");
         recargado.NumeroPaginas.Should().Be(250);
@@ -156,7 +156,7 @@ public class LibroControllerTests
     [Fact]
     public async Task Actualizar_ConIdInexistente_DeberiaDevolver404()
     {
-        var libroActualizado = new LibroUpdateDTO
+        var libroActualizado = new LibroUpdateDto
         {
             Titulo = "No existe",
             Genero = "Ninguno",
@@ -183,7 +183,7 @@ public class LibroControllerTests
         // Arrange
         string titulo = $"Libro Delete {Guid.NewGuid()}";
 
-        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDTO
+        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDto
         {
             Titulo = titulo,
             Genero = "Terror",
@@ -194,10 +194,10 @@ public class LibroControllerTests
             AutorId = 4
         });
 
-        List<LibroDTO> encontrados =
-            (await _client.GetFromJsonAsync<List<LibroDTO>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
+        List<LibroDto> encontrados =
+            (await _client.GetFromJsonAsync<List<LibroDto>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
 
-        LibroDTO creado = encontrados.Single(l => l.Titulo == titulo);
+        LibroDto creado = encontrados.Single(l => l.Titulo == titulo);
 
         // Act
         HttpResponseMessage deleteResponse =
@@ -229,8 +229,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerPorGeneroDeberiaFiltrarCorrectamente()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>("/api/Libro/genero/Terror");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto>>("/api/Libro/genero/Terror");
 
         libros.Should().NotBeNull();
         libros!.Should().OnlyContain(l => l.Genero == "Terror");
@@ -240,8 +240,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerPorAutorDeberiaDevolverSoloLibrosDeEseAutor()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>("/api/Libro/autor/5");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto>>("/api/Libro/autor/5");
 
         libros.Should().NotBeNull();
         libros!.Should().OnlyContain(l => l.AutorId == 5);
@@ -251,8 +251,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerDisponibles_SoloDeberiaDevolverLibrosDisponibles()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>("/api/Libro/disponibles");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto    >>("/api/Libro/disponibles");
 
         libros.Should().NotBeNull();
         libros!.Should().OnlyContain(l => l.Disponible);
@@ -261,8 +261,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerNoDisponiblesSoloDeberiaDevolverLibrosPrestados()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>("/api/Libro/no-disponibles");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto>>("/api/Libro/no-disponibles");
 
         libros.Should().NotBeNull();
         libros!.Should().OnlyContain(l => !l.Disponible);
@@ -272,8 +272,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerBaratosSoloDeberiaDevolverLibrosPorDebajoDelUmbral()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>("/api/Libro/baratos");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto>>("/api/Libro/baratos");
 
         libros.Should().NotBeNull();
         libros!.Should().OnlyContain(l => l.Precio < 20);
@@ -283,8 +283,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerCarosSoloDeberiaDevolverLibrosPorEncimaDelUmbral()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>("/api/Libro/caros");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto>>("/api/Libro/caros");
 
         libros.Should().NotBeNull();
         libros!.Should().OnlyContain(l => l.Precio > 50);
@@ -294,8 +294,8 @@ public class LibroControllerTests
     [Fact]
     public async Task BuscarPorTituloDeberiaEncontrarCoincidenciasParciales()
     {
-        List<LibroDTO>? libros =
-            await _client.GetFromJsonAsync<List<LibroDTO>>($"/api/Libro/buscar/{Uri.EscapeDataString("Harry Potter")}");
+        List<LibroDto>? libros =
+            await _client.GetFromJsonAsync<List<LibroDto>>($"/api/Libro/buscar/{Uri.EscapeDataString("Harry Potter")}");
 
         libros.Should().NotBeNull();
         libros!.Count.Should().BeGreaterOrEqualTo(3);
@@ -309,8 +309,8 @@ public class LibroControllerTests
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        EstadisticasDTO? estadisticas =
-            await response.Content.ReadFromJsonAsync<EstadisticasDTO>();
+        EstadisticasDto? estadisticas =
+            await response.Content.ReadFromJsonAsync<EstadisticasDto>();
 
         estadisticas.Should().NotBeNull();
         estadisticas!.TotalLibros.Should().BeGreaterOrEqualTo(15);
@@ -323,8 +323,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerMasCaroDeberiaDevolverElLibroDeMayorPrecio()
     {
-        LibroDTO? libro =
-            await _client.GetFromJsonAsync<LibroDTO>("/api/Libro/mas-caro");
+        LibroDto? libro =
+            await _client.GetFromJsonAsync<LibroDto>("/api/Libro/mas-caro");
 
         libro.Should().NotBeNull();
         libro!.Titulo.Should().Be("El Señor de los Anillos");
@@ -333,8 +333,8 @@ public class LibroControllerTests
     [Fact]
     public async Task ObtenerMasBaratoDeberiaDevolverElLibroDeMenorPrecio()
     {
-        LibroDTO? libro =
-            await _client.GetFromJsonAsync<LibroDTO>("/api/Libro/mas-barato");
+        LibroCreateDto libro =
+            await _client.GetFromJsonAsync<LibroDto>("/api/Libro/mas-barato");
 
         libro.Should().NotBeNull();
         libro!.Titulo.Should().Be("El Hobbit");
@@ -350,7 +350,7 @@ public class LibroControllerTests
         // Arrange: se crea un libro propio, disponible, para no afectar a otros tests
         string titulo = $"Libro Prestamo {Guid.NewGuid()}";
 
-        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDTO
+        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDto
         {
             Titulo = titulo,
             Genero = "Aventura",
@@ -361,10 +361,10 @@ public class LibroControllerTests
             AutorId = 3
         });
 
-        List<LibroDTO> encontrados =
-            (await _client.GetFromJsonAsync<List<LibroDTO>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
+        List<LibroDto> encontrados =
+            (await _client.GetFromJsonAsync<List<LibroDto>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
 
-        LibroDTO creado = encontrados.Single(l => l.Titulo == titulo);
+        LibroDto creado = encontrados.Single(l => l.Titulo == titulo);
 
         // Act
         HttpResponseMessage patchResponse =
@@ -374,8 +374,8 @@ public class LibroControllerTests
         patchResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Assert: el cambio de estado se ha guardado en base de datos
-        LibroDTO? recargado =
-            await _client.GetFromJsonAsync<LibroDTO>($"/api/Libro/{creado.Id}");
+        LibroDto? recargado =
+            await _client.GetFromJsonAsync<LibroDto>($"/api/Libro/{creado.Id}");
 
         recargado!.Disponible.Should().BeFalse();
     }
@@ -386,7 +386,7 @@ public class LibroControllerTests
         // Arrange: se crea un libro propio, ya prestado (Disponible = false)
         string titulo = $"Libro Devolucion {Guid.NewGuid()}";
 
-        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDTO
+        await _client.PostAsJsonAsync("/api/Libro", new LibroCreateDto
         {
             Titulo = titulo,
             Genero = "Aventura",
@@ -397,10 +397,10 @@ public class LibroControllerTests
             AutorId = 3
         });
 
-        List<LibroDTO> encontrados =
-            (await _client.GetFromJsonAsync<List<LibroDTO>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
+        List<LibroDto> encontrados =
+            (await _client.GetFromJsonAsync<List<LibroDto>>($"/api/Libro/buscar/{Uri.EscapeDataString(titulo)}"))!;
 
-        LibroDTO creado = encontrados.Single(l => l.Titulo == titulo);
+        LibroDto creado = encontrados.Single(l => l.Titulo == titulo);
 
         // Act
         HttpResponseMessage patchResponse =
@@ -410,8 +410,8 @@ public class LibroControllerTests
         patchResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Assert: el cambio de estado se ha guardado en base de datos
-        LibroDTO? recargado =
-            await _client.GetFromJsonAsync<LibroDTO>($"/api/Libro/{creado.Id}");
+        LibroDto? recargado =
+            await _client.GetFromJsonAsync<LibroDto>($"/api/Libro/{creado.Id}");
 
         recargado!.Disponible.Should().BeTrue();
     }

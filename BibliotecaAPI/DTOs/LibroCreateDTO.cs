@@ -15,4 +15,9 @@ public class LibroCreateDto
     public DateTime? FechaPublicacion { get; set; }
 
     public required int AutorId { get; set; }
+
+    public static implicit operator LibroCreateDto?(LibroDto? v)
+    {
+        throw new NotImplementedException();
+    }
 }
