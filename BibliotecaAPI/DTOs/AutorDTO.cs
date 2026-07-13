@@ -1,6 +1,6 @@
 ﻿namespace BibliotecaAPI.DTOs;
 
-public class AutorDTO
+public class AutorDto
 {
     public int Id { get; set; }
 

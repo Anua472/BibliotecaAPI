@@ -1,6 +1,6 @@
 ﻿namespace BibliotecaAPI.DTOs;
 
-public class LibroResumenDTO
+public class LibroResumenDto
 {
     public int Id { get; set; }
 

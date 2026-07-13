@@ -1,6 +1,6 @@
 ﻿namespace BibliotecaAPI.DTOs;
 
-public class LibroUpdateDTO
+public class LibroUpdateDto
 {
     public string Titulo { get; set; } = string.Empty;
 

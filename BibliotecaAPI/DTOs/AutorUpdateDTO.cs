@@ -1,10 +1,10 @@
 ﻿namespace BibliotecaAPI.DTOs;
 
-public class AutorUpdateDTO
+public class AutorUpdateDto
 {
     public string Nombre { get; set; } = string.Empty;
 
     public string Nacionalidad { get; set; } = string.Empty;
 
-    public DateTime FechaNacimiento { get; set; }
+    public DateTime? FechaNacimiento  { get; set; }
 }

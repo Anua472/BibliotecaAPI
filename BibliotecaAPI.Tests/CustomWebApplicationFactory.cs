@@ -28,7 +28,7 @@ public class CustomWebApplicationFactory
         });
     }
 
-    private void SeedData(BibliotecaContext context)
+    private static void SeedData(BibliotecaContext context)
     {
         // AUTORES (igual que el script del manual)
         var autores = new[]

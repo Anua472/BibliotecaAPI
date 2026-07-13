@@ -1,6 +1,6 @@
 ﻿namespace BibliotecaAPI.DTOs;
 
-public class AutorCreateDTO
+public class AutorCreateDto
 {
     public string Nombre { get; set; } = string.Empty;
 
